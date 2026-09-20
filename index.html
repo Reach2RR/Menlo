@@ -248,7 +248,29 @@
   }
   .btn-ghost:hover{border-color:var(--teal);background:rgba(127,168,173,0.08);}
   .nav-cta{display:flex;gap:12px;align-items:center;}
-  .nav-toggle{display:none;}
+  .nav-toggle{
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:5px;
+    width:40px;height:40px;
+    border:1px solid var(--line-strong);
+    border-radius:6px;
+    background:transparent;
+    cursor:pointer;
+    flex:none;
+    padding:0;
+  }
+  .nav-toggle-bar{
+    width:18px;height:2px;
+    background:var(--text);
+    border-radius:2px;
+    transition:transform .2s ease, opacity .2s ease;
+  }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2){opacity:0;}
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
 
   /* ===== HERO ===== */
   .hero{
@@ -349,13 +371,6 @@
     font-size:11.5px;color:var(--text-dimmer);margin-top:4px;
     font-family:'IBM Plex Mono',monospace;
   }
-  .schematic-box{
-    background:var(--bg-alt);
-    border:1px solid var(--line);
-    border-radius:4px;
-    padding:10px;
-  }
-  .schematic-box svg{width:100%;height:auto;display:block;}
 
   /* ===== SECTION HEADERS ===== */
   .sec-head{
@@ -640,6 +655,9 @@
     background:rgba(111,174,140,0.12);border:1px solid rgba(111,174,140,0.4);color:var(--status);
     display:none;
   }
+  #form-msg.is-error{
+    background:rgba(168,69,46,0.1);border-color:rgba(168,69,46,0.4);color:var(--danger);
+  }
 
   /* ===== FOOTER ===== */
   footer{padding:50px 0 34px;}
@@ -663,7 +681,28 @@
 
   /* ===== RESPONSIVE ===== */
   @media (max-width:980px){
-    nav.links{display:none;}
+    header.site{position:sticky;}
+    .nav-inner{position:relative;}
+    .nav-toggle{display:flex;}
+    nav.links{
+      display:none;
+      position:absolute;
+      top:100%;
+      left:0;right:0;
+      flex-direction:column;
+      align-items:stretch;
+      gap:0;
+      background:var(--surface);
+      border-bottom:1px solid var(--line-strong);
+      box-shadow:0 16px 30px rgba(13,23,25,0.12);
+      padding:8px 28px 18px;
+    }
+    nav.links.is-open{display:flex;}
+    nav.links a{
+      padding:13px 0;
+      border-top:1px solid var(--line);
+      font-size:15px;
+    }
     .hero-grid{grid-template-columns:1fr;}
     .services-grid{grid-template-columns:repeat(2,1fr);}
     .coverage-grid{grid-template-columns:1fr;}
@@ -676,11 +715,18 @@
   }
   @media (max-width:640px){
     .wrap{padding:0 20px;}
+    .nav-inner{height:64px;}
+    .logo{font-size:16px;}
+    .logo .sub{font-size:9px;}
+    .btn-sky{padding:9px 14px;font-size:12px;}
     .services-grid{grid-template-columns:1fr;}
     .process-item{grid-template-columns:1fr;gap:10px;}
     .process-num{padding-top:0;}
     .form-row{grid-template-columns:1fr;}
     .readouts{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:400px){
+    .btn-sky span.btn-arrow{display:none;}
   }
   /* ===== WHATSAPP FLOAT ===== */
   .wa-float{
@@ -808,7 +854,7 @@
         <div class="sub">Equipment care, made human.</div>
       </div>
     </a>
-    <nav class="links">
+    <nav class="links" id="nav-links">
       <a href="#services">Services</a>
       <a href="#process">Process</a>
       <a href="#coverage">Coverage</a>
@@ -817,8 +863,12 @@
       <a href="#contact">Contact</a>
     </nav>
     <div class="nav-cta">
-      <a href="tel:+919400635691" class="btn btn-ghost">+91 94006 35691</a>
-      <a href="#contact" class="btn btn-sky">Request pickup →</a>
+      <a href="#contact" class="btn btn-sky">Request pickup <span class="btn-arrow">→</span></a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
     </div>
   </div>
 </header>
@@ -853,7 +903,7 @@
             <div class="lbl">Avg. turnaround</div>
           </div>
           <div class="readout">
-            <div class="val">12,400<small>+</small></div>
+            <div class="val">1240<small>+</small></div>
             <div class="lbl">Units restored</div>
           </div>
           <div class="readout">
@@ -864,31 +914,6 @@
             <div class="val">98.6<small>%</small></div>
             <div class="lbl">First-fix rate</div>
           </div>
-        </div>
-        <div class="schematic-box">
-          <svg viewBox="0 0 420 220" fill="none" role="img" aria-labelledby="schematic-title">
-            <title id="schematic-title">Schematic diagram of a Class B autoclave sterilizer showing the chamber, pressure gauge and door gasket, annotated as unit 0417</title>
-            <!-- autoclave schematic -->
-            <rect x="30" y="30" width="180" height="150" rx="8" stroke="#2c565c" stroke-width="1.5"/>
-            <circle cx="120" cy="105" r="55" stroke="#2c565c" stroke-width="1.5"/>
-            <circle cx="120" cy="105" r="42" stroke="#9aa6a5" stroke-width="1" stroke-dasharray="2 3"/>
-            <circle cx="120" cy="105" r="4" fill="#b8721f"/>
-            <line x1="120" y1="105" x2="145" y2="82" stroke="#b8721f" stroke-width="1.5"/>
-            <!-- gauge -->
-            <path d="M95 80 A 30 30 0 0 1 145 80" stroke="#256b42" stroke-width="1.5"/>
-            <!-- door hinges -->
-            <line x1="30" y1="55" x2="18" y2="55" stroke="#2c565c" stroke-width="1.5"/>
-            <line x1="30" y1="155" x2="18" y2="155" stroke="#2c565c" stroke-width="1.5"/>
-            <!-- callout lines -->
-            <line x1="210" y1="45" x2="260" y2="45" stroke="#9aa6a5" stroke-width="1"/>
-            <text x="264" y="49" fill="#67797b" font-family="IBM Plex Mono" font-size="10">CHAMBER — 18L</text>
-            <line x1="210" y1="90" x2="260" y2="90" stroke="#9aa6a5" stroke-width="1"/>
-            <text x="264" y="94" fill="#67797b" font-family="IBM Plex Mono" font-size="10">PRESSURE GAUGE</text>
-            <line x1="210" y1="135" x2="260" y2="135" stroke="#9aa6a5" stroke-width="1"/>
-            <text x="264" y="139" fill="#67797b" font-family="IBM Plex Mono" font-size="10">DOOR GASKET</text>
-            <line x1="150" y1="175" x2="150" y2="200" stroke="#9aa6a5" stroke-width="1"/>
-            <text x="70" y="212" fill="#67797b" font-family="IBM Plex Mono" font-size="10">CLASS B STERILIZER — UNIT 0417</text>
-          </svg>
         </div>
       </div>
     </div>
@@ -1077,11 +1102,11 @@
     <div class="wrap">
       <div class="stats-strip">
         <div class="stat">
-          <div class="num">12,400<span>+</span></div>
-          <div class="lbl">Units repaired since 2014</div>
+          <div class="num">1240<span>+</span></div>
+          <div class="lbl">Units repaired since 2024</div>
         </div>
         <div class="stat">
-          <div class="num">1,900<span>+</span></div>
+          <div class="num">190<span>+</span></div>
           <div class="lbl">Clinics on file across India</div>
         </div>
         <div class="stat">
@@ -1190,25 +1215,26 @@
           </div>
         </div>
 
-        <form class="enquiry" id="enquiry-form">
+        <form class="enquiry" id="enquiry-form" action="https://formspree.io/f/xgavozvg" method="POST">
+          <input type="hidden" name="_subject" value="New equipment repair enquiry — Menlo Healthcare website">
           <div class="form-row">
             <div class="field">
               <label for="f-name">Your name</label>
-              <input id="f-name" type="text" required placeholder="Dr. Anjali Menon">
+              <input id="f-name" name="name" type="text" required placeholder="Dr. Anjali Menon">
             </div>
             <div class="field">
               <label for="f-clinic">Clinic name</label>
-              <input id="f-clinic" type="text" required placeholder="Smile Studio Dental Clinic">
+              <input id="f-clinic" name="clinic" type="text" required placeholder="Smile Studio Dental Clinic">
             </div>
           </div>
           <div class="form-row">
             <div class="field">
               <label for="f-phone">Phone number</label>
-              <input id="f-phone" type="tel" required placeholder="+91 90000 00000">
+              <input id="f-phone" name="phone" type="tel" required placeholder="+91 90000 00000">
             </div>
             <div class="field">
               <label for="f-equip">Equipment type</label>
-              <select id="f-equip" required>
+              <select id="f-equip" name="equipment" required>
                 <option value="">Select equipment</option>
                 <option>Autoclave / sterilizer</option>
                 <option>Air compressor</option>
@@ -1222,11 +1248,11 @@
           </div>
           <div class="field">
             <label for="f-issue">Describe the fault</label>
-            <textarea id="f-issue" required placeholder="e.g. Autoclave won't build pressure past 0.5 bar, error light flashing on control panel."></textarea>
+            <textarea id="f-issue" name="issue" required placeholder="e.g. Autoclave won't build pressure past 0.5 bar, error light flashing on control panel."></textarea>
           </div>
           <div class="form-foot">
             <p class="form-note">We'll call within the hour during service hours to confirm pickup.</p>
-            <button type="submit" class="btn btn-accent">Send enquiry →</button>
+            <button type="submit" class="btn btn-accent" id="f-submit">Send enquiry →</button>
           </div>
           <div id="form-msg" class="mono"></div>
         </form>
@@ -1300,13 +1326,56 @@
 </div>
 
 <script>
-  document.getElementById('enquiry-form').addEventListener('submit', function(e){
-    e.preventDefault();
+  // ── Enquiry form → Formspree ────────────────────────────────────────────
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xgavozvg';
+
+  (function(){
+    const form = document.getElementById('enquiry-form');
     const msg = document.getElementById('form-msg');
-    msg.style.display = 'block';
-    msg.textContent = '✓ Enquiry received. A technician will call ' + (document.getElementById('f-phone').value || 'you') + ' shortly.';
-    this.reset();
-  });
+    const submitBtn = document.getElementById('f-submit');
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+
+      const phone = document.getElementById('f-phone').value || 'you';
+      const data = new FormData(form);
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+      msg.classList.remove('is-error');
+      msg.style.display = 'none';
+
+      fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(function(response){
+        if (response.ok) {
+          msg.classList.remove('is-error');
+          msg.style.display = 'block';
+          msg.textContent = '✓ Enquiry received. A technician will call ' + phone + ' shortly.';
+          form.reset();
+        } else {
+          return response.json().then(function(payload){
+            const detail = payload && payload.errors
+              ? payload.errors.map(function(er){ return er.message; }).join(', ')
+              : '';
+            throw new Error(detail || 'Submission failed');
+          });
+        }
+      })
+      .catch(function(){
+        msg.classList.add('is-error');
+        msg.style.display = 'block';
+        msg.textContent = 'Something went wrong sending that. Please call or WhatsApp us directly — see the details on the left.';
+      })
+      .finally(function(){
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send enquiry →';
+      });
+    });
+  })();
 </script>
 
 <script>
@@ -1339,6 +1408,38 @@
       if (bubble.hidden){ openBubble(); } else { closeBubble(false); }
     });
     closeBtn.addEventListener('click', function(){ closeBubble(true); });
+  })();
+</script>
+
+<script>
+  (function(){
+    var navToggle = document.getElementById('nav-toggle');
+    var navLinks = document.getElementById('nav-links');
+    if (!navToggle || !navLinks) return;
+
+    function closeMenu(){
+      navLinks.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+    function openMenu(){
+      navLinks.classList.add('is-open');
+      navToggle.setAttribute('aria-expanded', 'true');
+    }
+
+    navToggle.addEventListener('click', function(){
+      var isOpen = navLinks.classList.contains('is-open');
+      if (isOpen) { closeMenu(); } else { openMenu(); }
+    });
+
+    // Close the menu after tapping a link
+    navLinks.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Close the menu if the viewport grows back to desktop size
+    window.addEventListener('resize', function(){
+      if (window.innerWidth > 980) closeMenu();
+    });
   })();
 </script>
 
